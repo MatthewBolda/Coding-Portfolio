@@ -1,0 +1,18 @@
+1234
+1234
+The largest number I can think of is 50, I'm just kidding
+The loneliest number is the number 1 followed by the number 2
+0b1100100
+The number 50 in binary is 0b110010
+Both 0b1010 and 0b10100 are numbers in binary
+0xaa
+The number 50 in hex is 0x32
+Both 0xa and 0xdac are numbers in hex
+This is a test of %
+This is a test of double % I hope it works
+The parameter %m is not a thing, but its my favorite letter
+word
+The number 50 as a string is 50
+Both 10 and 20 are numbers as strings
+K
+$12.34

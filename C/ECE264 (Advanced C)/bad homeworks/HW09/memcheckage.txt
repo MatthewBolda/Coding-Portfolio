@@ -1,0 +1,77 @@
+==14888== Memcheck, a memory error detector
+==14888== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==14888== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==14888== Command: ./pa09 databaseBinary.bin -n filename
+==14888== Parent PID: 14882
+==14888== 
+--14888-- 
+--14888-- Valgrind options:
+--14888--    --tool=memcheck
+--14888--    --log-file=memcheckage.txt
+--14888--    --leak-check=full
+--14888--    --verbose
+--14888-- Contents of /proc/version:
+--14888--   Linux version 2.6.32-696.20.1.el6.x86_64 (mockbuild@x86-042.build.eng.bos.redhat.com) (gcc version 4.4.7 20120313 (Red Hat 4.4.7-18) (GCC) ) #1 SMP Fri Jan 12 15:07:59 EST 2018
+--14888-- Arch and hwcaps: AMD64, amd64-sse3-cx16-lzcnt-avx2-bmi
+--14888-- Page sizes: currently 4096, max supported 4096
+--14888-- Valgrind library directory: /usr/lib64/valgrind
+--14888-- Reading syms from /home/shay/a/mbolda/ECE264/hw01/2018SpringProblems/HW09/pa09
+--14888-- Reading syms from /usr/lib64/valgrind/memcheck-amd64-linux
+--14888--    object doesn't have a dynamic symbol table
+--14888-- Reading syms from /lib64/ld-2.12.so
+--14888-- Scheduler: using generic scheduler lock implementation.
+--14888-- Reading suppressions file: /usr/lib64/valgrind/default.supp
+==14888== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-14888-by-mbolda-on-ee207lnx16.ecn.purdue.edu
+==14888== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-14888-by-mbolda-on-ee207lnx16.ecn.purdue.edu
+==14888== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-14888-by-mbolda-on-ee207lnx16.ecn.purdue.edu
+==14888== 
+==14888== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==14888== don't want to do, unless you know exactly what you're doing,
+==14888== or are doing some strange experiment):
+==14888==   /usr/lib64/valgrind/../../bin/vgdb --pid=14888 ...command...
+==14888== 
+==14888== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==14888==   /path/to/gdb ./pa09
+==14888== and then give GDB the following command
+==14888==   target remote | /usr/lib64/valgrind/../../bin/vgdb --pid=14888
+==14888== --pid is optional if only one valgrind process is running
+==14888== 
+--14888-- REDIR: 0x33ec017f90 (strlen) redirected to 0x38049551 (vgPlain_amd64_linux_REDIR_FOR_strlen)
+--14888-- Reading syms from /usr/lib64/valgrind/vgpreload_core-amd64-linux.so
+--14888-- Reading syms from /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so
+--14888-- REDIR: 0x33ec017da0 (index) redirected to 0x4a07c30 (index)
+--14888-- REDIR: 0x33ec017e20 (strcmp) redirected to 0x4a08570 (strcmp)
+--14888-- Reading syms from /lib64/libc-2.12.so
+--14888-- REDIR: 0x33ec484d10 (strcasecmp) redirected to 0x480155c (_vgnU_ifunc_wrapper)
+--14888-- REDIR: 0x33ec486fd0 (strncasecmp) redirected to 0x480155c (_vgnU_ifunc_wrapper)
+--14888-- REDIR: 0x33ec482c80 (__GI_strrchr) redirected to 0x4a07ab0 (__GI_strrchr)
+--14888-- REDIR: 0x33ec47aa50 (malloc) redirected to 0x4a069ac (malloc)
+--14888-- REDIR: 0x33ec4896b0 (memcpy) redirected to 0x4a08b60 (memcpy)
+--14888-- REDIR: 0x33ec47b8b0 (free) redirected to 0x4a063a9 (free)
+--14888-- REDIR: 0x33ec47f720 (strcmp) redirected to 0x480155c (_vgnU_ifunc_wrapper)
+--14888-- REDIR: 0x33ec47f760 (__GI_strcmp) redirected to 0x4a08520 (__GI_strcmp)
+--14888-- REDIR: 0x33ec484540 (mempcpy) redirected to 0x4a0a020 (mempcpy)
+--14888-- REDIR: 0x33ec4811a0 (__GI_strlen) redirected to 0x4a07fb0 (__GI_strlen)
+==14888== 
+==14888== HEAP SUMMARY:
+==14888==     in use at exit: 568 bytes in 1 blocks
+==14888==   total heap usage: 204 allocs, 203 frees, 68,348 bytes allocated
+==14888== 
+==14888== Searching for pointers to 1 not-freed blocks
+==14888== Checked 65,328 bytes
+==14888== 
+==14888== LEAK SUMMARY:
+==14888==    definitely lost: 0 bytes in 0 blocks
+==14888==    indirectly lost: 0 bytes in 0 blocks
+==14888==      possibly lost: 0 bytes in 0 blocks
+==14888==    still reachable: 568 bytes in 1 blocks
+==14888==         suppressed: 0 bytes in 0 blocks
+==14888== Reachable blocks (those to which a pointer was found) are not shown.
+==14888== To see them, rerun with: --leak-check=full --show-reachable=yes
+==14888== 
+==14888== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 8 from 6)
+--14888-- 
+--14888-- used_suppression:      4 U1004-ARM-_dl_relocate_object
+--14888-- used_suppression:      4 glibc-2.5.x-on-SUSE-10.2-(PPC)-2a
+==14888== 
+==14888== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 8 from 6)

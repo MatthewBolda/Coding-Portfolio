@@ -1,0 +1,95 @@
+        -:    0:Source:test_sorts.c
+        -:    0:Graph:test_sorts.gcno
+        -:    0:Data:-
+        -:    0:Runs:0
+        -:    0:Programs:0
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include "sorts.h"
+        -:    4:
+    #####:    5:int main(int argc, char* argv[]) {
+        -:    6:
+    #####:    7:	int test1 [] = {7,5,6,3,4,1,2};
+    #####:    8:	int array_size = sizeof(test1) / sizeof(test1[0]);
+    #####:    9:	merge_sort_array(test1 , array_size);
+    #####:   10:	for(int i = 0; i < array_size; i++){
+    #####:   11:		printf("%d ", test1[i]);
+        -:   12:	}
+    #####:   13:	printf("\n");
+        -:   14:
+    #####:   15:	int test2 [] = {4,3,2,1,4,3,2,1,4,4,4};
+    #####:   16:	array_size = sizeof(test2) / sizeof(test2[0]);
+    #####:   17:	merge_sort_array(test2 , array_size);
+    #####:   18:	for(int i = 0; i < array_size; i++){
+    #####:   19:		printf("%d ", test2[i]);
+        -:   20:	}
+    #####:   21:	printf("\n");
+        -:   22:
+    #####:   23:	int test3 [] = {51235, 78510, -1, 0, -4467419, 2147483647, -2147483648};
+    #####:   24:	array_size = sizeof(test3) / sizeof(test3[0]);
+    #####:   25:	merge_sort_array(test3 , array_size);
+    #####:   26:	for(int i = 0; i < array_size; i++){
+    #####:   27:		printf("%d ", test3[i]);
+        -:   28:	}
+    #####:   29:	printf("\n");
+        -:   30:	
+    #####:   31:	int test4 [] = {1,1,1,1};
+    #####:   32:	array_size = sizeof(test4) / sizeof(test4[0]);
+    #####:   33:	merge_sort_array(test4 , array_size);
+    #####:   34:	for(int i = 0; i < array_size; i++){
+    #####:   35:		printf("%d ", test4[i]);
+        -:   36:	}
+    #####:   37:	printf("\n");
+        -:   38:	
+        -:   39:	
+    #####:   40:	int test5 [] = {5,3,6,4,1,8};
+    #####:   41:	array_size = sizeof(test5) / sizeof(test5[0]);
+    #####:   42:	tree_sort_array(test5 , array_size);
+    #####:   43:	for(int i = 0; i < array_size; i++){
+    #####:   44:		printf("%d ", test5[i]);
+        -:   45:	}
+    #####:   46:	printf("\n");
+        -:   47:	
+    #####:   48:	int test6 [] = {51235, 78510, -1, 0, -4467419, 2147483647, -2147483648};
+    #####:   49:	array_size = sizeof(test6) / sizeof(test6[0]);
+    #####:   50:	tree_sort_array(test6 , array_size);
+    #####:   51:	for(int i = 0; i < array_size; i++){
+    #####:   52:		printf("%d ", test6[i]);
+        -:   53:	}
+    #####:   54:	printf("\n");
+        -:   55:
+    #####:   56:	int test7 [] = {4,3,2,1,4,3,2,1,4,4,4};
+    #####:   57:	array_size = sizeof(test7) / sizeof(test7[0]);
+    #####:   58:	merge_sort_array(test7 , array_size);
+    #####:   59:	for(int i = 0; i < array_size; i++){
+    #####:   60:		printf("%d ", test2[i]);
+        -:   61:	}
+    #####:   62:	printf("\n");
+        -:   63:
+    #####:   64:	int test8 [] = {7,5,6,3,4,1,2};
+    #####:   65:	array_size = sizeof(test8) / sizeof(test8[0]);
+    #####:   66:	quick_sort_array(test8 , array_size);
+    #####:   67:	for(int i = 0; i < array_size; i++){
+    #####:   68:		printf("%d ", test8[i]);
+        -:   69:	}
+    #####:   70:	printf("\n");
+        -:   71:
+    #####:   72:	int test9 [] = {4,3,2,1,4,3,2,1,4,4,4};
+    #####:   73:	array_size = sizeof(test9) / sizeof(test9[0]);
+    #####:   74:	merge_sort_array(test9 , array_size);
+    #####:   75:	for(int i = 0; i < array_size; i++){
+    #####:   76:		printf("%d ", test9[i]);
+        -:   77:	}
+    #####:   78:	printf("\n");
+        -:   79:
+    #####:   80:	int test10 [] = {51235, 78510, -1, 0, -4467419, 2147483647, -2147483648};
+    #####:   81:	array_size = sizeof(test10) / sizeof(test10[0]);
+    #####:   82:	merge_sort_array(test10 , array_size);
+    #####:   83:	for(int i = 0; i < array_size; i++){
+    #####:   84:		printf("%d ", test10[i]);
+        -:   85:	}
+    #####:   86:	printf("\n");
+        -:   87:
+    #####:   88:	return EXIT_SUCCESS;
+        -:   89:}
+        -:   90:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */

@@ -1,0 +1,11 @@
+123456
+123456
+1 and 2 are both small numbers
+16 and 0b10000 and 0x10 are all numbers in different bases also Matt is my name
+This is a test of double % and invalid %m I hope it works
+0x10 0x10
+K
+My name is Matt
+$12.34
+-$12.34
+-16 and -0b10000 and -0x10 are all numbers in different bases also Matt is my name

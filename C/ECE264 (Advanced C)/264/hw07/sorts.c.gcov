@@ -1,0 +1,260 @@
+        -:    0:Source:sorts.c
+        -:    0:Graph:sorts.gcno
+        -:    0:Data:sorts.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdlib.h>
+        -:    2:#include <stdbool.h>
+        -:    3:#include <assert.h>
+        -:    4:#include "sorts.h"
+        -:    5://#include <stdio.h>
+        -:    6://int index_counter = 0;
+        -:    7:
+        -:    8:// helper function declarations
+        -:    9:void _insert_node(List* address_list, int value);
+        -:   10:ListNode* _Find_Middle_Node(ListNode* address_list);
+        -:   11:ListNode* _merge_sort_helper(ListNode* head);
+        -:   12:ListNode* _merge_split_lists(ListNode* left_head, ListNode* right_head);
+        -:   13:
+        -:   14:BSTNode* _insert_root(BSTNode* root, int value);
+        -:   15:void _store_BST(BSTNode* root, int* array, int* index_counter);
+        -:   16:void _free_BST(BSTNode* root);
+        -:   17:
+        -:   18:int _qsort_helper(const void* left, const void* right);
+        -:   19:
+        -:   20:// step 1 call create_list
+        -:   21:// step 2 call merge_sort_list
+        -:   22:// step 3 store values in array
+        -:   23:// step 4 call empty_list
+        5:   24:void merge_sort_array(int* array, size_t size) {
+        -:   25:	
+        5:   26:	List sorted_list = create_list(array, size);
+        -:   27:
+        5:   28:	merge_sort_list(&sorted_list);
+        -:   29:	
+        5:   30:	int counter = 0;	
+       34:   31:	for(ListNode* temp = ((&sorted_list) -> head); temp != NULL; temp = temp -> next) {
+        -:   32:		//printf("%d", temp -> value);
+       29:   33:		array[counter] = temp -> value;
+       29:   34:		counter ++;
+        -:   35:	}
+        -:   36:
+        5:   37:	empty_list(&sorted_list);
+        -:   38:	
+        5:   39:}
+        -:   40:
+        -:   41:// step 1 call create_bst
+        -:   42:// step 2 use in order traversal to store sorted values in array
+        -:   43:// step 3 call empty_list
+        4:   44:void tree_sort_array(int* array, size_t size){
+        -:   45:
+        4:   46:	BST sorted_tree = create_bst(array,size);
+        -:   47:	//printf("\n\n%d\n\n", sorted_tree. size);
+        4:   48:	int index_counter = 0;
+        4:   49:	_store_BST(sorted_tree.root, array, &index_counter);
+        4:   50:	empty_bst(&sorted_tree);
+        4:   51:}
+        -:   52:
+        7:   53:void quick_sort_array(int* array, size_t size){
+        -:   54:
+        7:   55:	qsort(array,size,sizeof(array[0]), _qsort_helper);
+        -:   56:
+        7:   57:}
+        -:   58:
+       49:   59:int _qsort_helper(const void* left, const void* right){
+       49:   60:	const int* left_integer = left;
+       49:   61:	const int* right_integer = right;
+        -:   62:
+       49:   63:	if(*left_integer < *right_integer){
+       15:   64:		return -1;
+        -:   65:	}
+       34:   66:	else if( *left_integer > *right_integer){
+       26:   67:		return 1;
+        -:   68:	}
+        -:   69:	else{
+        8:   70:		return 0;
+        -:   71:	}
+        -:   72:
+        -:   73:}
+        -:   74:
+       52:   75:void _store_BST(BSTNode* root, int* array, int* index_counter){
+        -:   76:	//int counter = 0; //doesnt work, needs to be brought in function
+       52:   77:	if (root != NULL){
+       24:   78:		_store_BST(root -> left, array, index_counter);
+        -:   79:	//	printf("array[%d] = %d\n",index_counter ,root -> value);
+       24:   80:		array[*index_counter] = root -> value;
+       24:   81:		*index_counter = *index_counter + 1;
+       24:   82:		_store_BST(root -> right, array, index_counter);
+        -:   83:	//	printf(" index_counter = %d\n", index_counter);
+        -:   84:	}
+        -:   85:
+       52:   86:}
+        -:   87:
+       52:   88:void _free_BST(BSTNode* root){
+       52:   89:	if(root != NULL){
+       24:   90:		_free_BST(root -> left);
+       24:   91:		_free_BST(root -> right);
+       24:   92:		free(root);
+        -:   93:	}
+       52:   94:}
+        4:   95:void empty_bst(BST* sorted_tree){
+        4:   96:	_free_BST(sorted_tree -> root);
+        4:   97:}
+        -:   98:
+       74:   99:BSTNode* _insert_root(BSTNode* root, int value) {
+        -:  100:
+       74:  101:	if(root == NULL){
+       24:  102:		root = malloc(sizeof(*root));
+       24:  103:			root -> value = value;
+       24:  104:			root -> left = NULL;
+       24:  105:			root -> right = NULL;
+       24:  106:		return root;
+        -:  107:	}
+       50:  108:	else if( value <= root -> value){
+       36:  109:		root -> left = _insert_root(root -> left, value);
+        -:  110:		}
+        -:  111:	else{
+       14:  112:		root -> right= _insert_root(root -> right, value);
+        -:  113:		}
+       50:  114:	return root;
+        -:  115:}
+        4:  116:BST create_bst(const int* array, int size) {
+        4:  117:	BST new_tree = { .root = NULL, .size = size};
+        4:  118:	if(size == 0){
+        1:  119:		return new_tree;
+        -:  120:	}
+        -:  121:	else {
+        3:  122:		new_tree.root = _insert_root( new_tree.root, array[0]);
+       24:  123:		for(int i=1; i < size; i++){
+       21:  124:			_insert_root( new_tree.root, array[i]);
+        -:  125:		}
+        -:  126:	}
+        3:  127:	return new_tree;
+        -:  128:}
+        -:  129:
+        -:  130:// helper function to insert node and keep track of tail
+       29:  131:void _insert_node(List* address_list, int value){
+       29:  132:	ListNode* new_node = malloc(sizeof(*new_node));
+       29:  133:		new_node -> value = value;
+       29:  134:		new_node -> next = NULL;
+        -:  135:
+       29:  136:	if(address_list -> head == NULL){
+        4:  137:		address_list -> head = new_node;
+        -:  138:	}
+        -:  139:	else{	
+       25:  140:		ListNode* temp_node = address_list -> head;
+      128:  141:		while(temp_node -> next != NULL){
+       78:  142:			temp_node = temp_node -> next;
+        -:  143:		}
+       25:  144:		temp_node -> next = new_node;
+       25:  145:		address_list -> tail = new_node;
+        -:  146:	}
+        -:  147:
+       29:  148:}
+        -:  149:// initialize list and set null, then use helper to add nodes.
+        5:  150:List create_list(const int* array, int size) {
+        -:  151:	
+        5:  152:	List new_list = { .head = NULL, .tail = NULL, .size = size};
+        -:  153:
+        5:  154:	if(size == 0) {
+        -:  155:	//	assert((new_list -> head == NULL) == (new_list -> size == 0));
+        -:  156:	//	assert((new_list -> tail == NULL) == (new_list -> size == 0));
+        1:  157:		return new_list;
+        -:  158:	}
+        -:  159:	else {
+       33:  160:		for(int i = 0; i < size; i++) {
+       29:  161:			_insert_node(&new_list, array[i]);
+        -:  162:		}
+        -:  163:	}
+        4:  164:	return new_list;
+        -:  165:	
+        -:  166:}
+        -:  167:
+        5:  168:void merge_sort_list(List* a_list) {
+        -:  169:
+        5:  170:	ListNode* merged_head = _merge_sort_helper(a_list -> head);
+        -:  171:	//printf("merged head  %d\n", merged_head -> value);
+        5:  172:	a_list -> head = merged_head;
+        -:  173:	
+        5:  174:}
+        -:  175:
+        -:  176:
+        -:  177:
+        -:  178:
+       55:  179:ListNode* _merge_sort_helper(ListNode* head) {
+        -:  180:
+       55:  181:	if(( head == NULL) || (head -> next == NULL)){
+       30:  182:		return head;
+        -:  183:	}
+        -:  184:	else{
+        -:  185:	
+       25:  186:	ListNode* middle = _Find_Middle_Node(head);
+        -:  187:	//printf("middle     %d\n", middle -> value);
+       25:  188:	ListNode* left_head  = head;
+        -:  189:	//printf("left head  %d\n", left_head -> value);
+       25:  190:	ListNode* right_head = middle -> next;
+        -:  191:	//printf("right head %d\n", right_head -> value);
+       25:  192:	middle -> next = NULL;
+        -:  193:
+       25:  194:	ListNode* recursed_left_head = _merge_sort_helper(left_head);
+        -:  195:	//printf(" recursed_left_head   %d\n", recursed_left_head -> value);
+       25:  196:	ListNode* recursed_right_head = _merge_sort_helper(right_head);
+        -:  197:	//printf(" recursed_right_head  %d\n", recursed_right_head -> value);
+        -:  198:	
+       25:  199:	ListNode* merged_head = _merge_split_lists(recursed_left_head, recursed_right_head);
+        -:  200:	
+        -:  201:	//printf("merged head  %d\n", merged_head -> value);
+       25:  202:	return merged_head;
+        -:  203:	}
+        -:  204:}
+        -:  205:
+       78:  206:ListNode* _merge_split_lists(ListNode* left_head, ListNode* right_head){
+        -:  207:
+       78:  208:	ListNode* result_head = NULL;
+       78:  209:	if(left_head == NULL){
+       13:  210:		return right_head;
+        -:  211:	}
+       65:  212:	else if(right_head == NULL){
+       12:  213:		return left_head;
+        -:  214:		
+        -:  215:	}
+       53:  216:	if( left_head -> value <= right_head -> value){
+       31:  217:		result_head = left_head;
+       31:  218:		result_head -> next = _merge_split_lists(left_head -> next, right_head);
+        -:  219:	}
+        -:  220:	else {
+       22:  221:		result_head = right_head;
+       22:  222:		result_head -> next = _merge_split_lists(left_head, right_head -> next);
+        -:  223:	}
+        -:  224:
+       53:  225:	return result_head;
+        -:  226:
+        -:  227:}
+        -:  228:
+       25:  229:ListNode* _Find_Middle_Node(ListNode* head){
+        -:  230:	//if(head == NULL){
+        -:  231:	//	return head;       //none of my test cases caused these lines to be executed
+        -:  232:	//}					   // so I commented them out for full gcov
+       25:  233:	ListNode* up_by_one = head;
+       25:  234:	ListNode* up_by_two = head;
+       73:  235:	while( (up_by_two -> next != NULL) && (up_by_two -> next -> next != NULL)){
+       23:  236:		up_by_one = up_by_one -> next;
+       23:  237:		up_by_two = up_by_two -> next -> next;
+        -:  238:	}
+       25:  239:	return up_by_one;
+        -:  240:}
+        -:  241:
+        5:  242:void empty_list(List* a_list) {
+        -:  243:	
+       39:  244:	while( a_list -> head != NULL) {
+       29:  245:		ListNode* free_node = a_list -> head;
+       29:  246:		a_list -> head = a_list -> head -> next;
+       29:  247:		free(free_node);
+        -:  248:	}
+        5:  249:	a_list -> head = NULL;
+        5:  250:	a_list -> tail = NULL;
+        5:  251:	a_list -> size = 0;
+        -:  252:	
+        5:  253:}
+        -:  254:
+        -:  255:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */

@@ -1,0 +1,104 @@
+ALCHEMY
+
+──────────────────────────────────────────────────────────────────────
+INSTRUCTIONS
+
+For each item below, mark
+• Mark [x] if the code quality rule was followed.
+• Mark [-] if the rule is not relevant to this assignment (e.g., no sizeof(…)).
+  This applies only to the code quality standards.
+• Mark [/] if the rule was not followed because it would harm readability and/or
+  maintainability.  Then, on a separate line below it, briefly explain why.
+  (Ex:  "Used #define because const int can't be used as an array subscript.")
+  
+Vim tip:  Press /_ (search for "_") to jump to the first underscore.
+          Press rx to replace the character under the cursor ("_") with "x".
+		  Press j. to go down and do the same for the next underscore.
+
+CAUTION:  Do not mark "[x]" for an item that does not apply to your code.  If you
+mark "[x]" that will be a red flag to whoever scores your Alchemy submission.
+
+Code quality standards:
+https://engineering.purdue.edu/ece264/19sp/code_quality
+
+Alchemy offer:
+https://engineering.purdue.edu/ece264/19sp/alchemy/
+
+──────────────────────────────────────────────────────────────────────
+A. ALCHEMY REQUIREMENTS
+   1. [_] Passes pre-tester with 0 errors.
+   2. [_] All functions comprise ≤35 SLOC and ≤50 LOC.
+   3. [_] All lines can be displayed in a 95-column window (i.e., ≤95 characters)
+   4. [_] Each statement contains ≤3 of these: + - * / % != < <= > >= == != && ||
+   5. [_] Code in paragraphs for functions with ≥10 SLOC.
+   6. [_] Meets the SLOC threshold.
+
+B. CODE QUALITY STANDARDS
+
+   1. dead code
+      a. [_] Unused functions
+      b. [_] Unreachable code
+      c. [_] Unused variables
+      d. [_] Useless assignments
+   2. variable scope
+      a. [_] Loop index
+      b. [_] Global variables
+   3. variable initialization
+      a. [_] Declarations initialize
+      b. [_] Array initializers
+      c. [_] Struct initializers
+   4. names – format conventions
+      a. [_] Global constants
+      b. [_] Multi-word variable and function names
+   5. naming – numbers and strings
+      a. [_] 1- and 2-letter names
+      b. [_] loop index (int)
+      c. [_] dimensions, distances, measurements (int, float, etc.)
+      d. [_] quantities (int)
+      e. [_] sequence length (int)
+      f. [_] bool
+      g. [_] array
+      h. [_] string (char*)
+      i. [_] address
+   6. naming – functions
+      a. [_] function
+      b. [_] internal helper functions or global constants
+      c. [_] function returning bool
+   7. naming – struct types, objects
+      a. [_] Struct type
+      b. [_] Struct object
+      c. [_] Linked list node type
+      d. [_] Linked list node object
+      e. [_] Tree node type
+      f. [_] Tree node object
+   8. cast operator
+      a. [_] casting operator
+   9. structure
+      a. [_] braces for if, for, while, switch, do, …
+      b. [_] multiple statements on one line
+      c. [_] Braces for if blocks
+      d. [_] Braces for functions
+      e. [_] For vs. While
+  10. whitespace
+      a. [_] indent block
+      b. [_] indent type
+      c. [_] Spacing between functions
+  11. explanatory comments
+      a. [_] Comments
+      b. [_] Vim modeline
+  12. test code
+      a. [_] printf(…)
+      b. [_] assert(…)
+  13. constant expressions
+      a. [_] constants
+      b. [_] NULL vs. 0 vs. '\0'
+      c. [_] Boolean values
+      d. [_] sizeof(…)
+      e. [_] sizeof argument
+      f. [_] character literals
+
+
+
+──────────────────────────────────────────────────────────────────────
+v1.1
+# vim: set filetype=text fileencoding=utf8 fileformat=unix expandtab:

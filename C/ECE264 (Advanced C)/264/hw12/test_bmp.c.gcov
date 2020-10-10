@@ -1,0 +1,241 @@
+        -:    0:Source:test_bmp.c
+        -:    0:Graph:test_bmp.gcno
+        -:    0:Data:test_bmp.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <stdbool.h>
+        -:    4:#include <string.h>
+        -:    5:#include <assert.h>
+        -:    6:#include <errno.h>
+        -:    7:#include "miniunit.h"
+        -:    8:#include "bmp.h"
+        -:    9:void set_pixel(BMPImage* img, size_t x, size_t y, uint8_t r, uint8_t g, uint8_t b);
+        -:   10:BMPImage* create_bmp(size_t w, size_t h, uint8_t r, uint8_t g, uint8_t b);
+        -:   11:int test_read();
+        -:   12:int test_write();
+        -:   13:int test_failed_header();
+        -:   14:int test_crop_no_padding();
+        -:   15:int test_crop_padding();
+        -:   16:int test_pixel();
+        -:   17:
+        -:   18:
+        1:   19:int main(int argc, char* argv[]) {
+        -:   20:
+        1:   21:	mu_run(test_write); 		//DONE	//i believe this test is complete, should pass
+        1:   22:	mu_run(test_read);			//DONE	//i believe this test is complete, should pass
+        1:   23:	mu_run(test_failed_header);	//DONE  //i believe this test is complete, should pass 
+        1:   24:	mu_run(test_crop_no_padding); 					//i believe this test is complete, should pass
+        1:   25:	mu_run(test_crop_padding); 					//i believe this test is complete, should pass
+        1:   26:	mu_run(test_pixel);			//DONE	//i believe this test is complete, should pass
+        -:   27:
+        1:   28:	return EXIT_SUCCESS;
+        -:   29:}
+        -:   30:
+        1:   31:int test_write(){
+        1:   32:	mu_start();
+        1:   33:	BMPImage* test_image = create_bmp(7,7,0xff,0xaa,0xaa);	
+        1:   34:	FILE* fp = fopen("test_write.bmp", "w");
+        1:   35:	const char* error = NULL;
+        1:   36:	bool is_success = write_bmp(fp, test_image,&error);
+        1:   37:	mu_check( is_success);
+        1:   38:	mu_check( check_bmp_header(&test_image -> header, fp));
+        1:   39:	mu_check( test_image != NULL);	
+        1:   40:	free_bmp(test_image);
+        1:   41:	mu_check( test_image == NULL);	
+        1:   42:	fclose(fp);
+        1:   43:	mu_check(error == NULL);
+        1:   44:	mu_end();
+        -:   45:}
+        -:   46:
+        1:   47:int test_read(){
+        -:   48:	
+        1:   49:	mu_start();																	
+        1:   50:	BMPImage* test_image = create_bmp(6,6,0xff,0xaa,0xaa);
+        1:   51:	FILE* fp = fopen("test_write_read.bmp","w");
+        1:   52:	const char* error = NULL;
+        1:   53:	bool is_success = write_bmp(fp, test_image, &error);
+        1:   54:	mu_check( is_success);
+        1:   55:	fclose(fp);
+        1:   56:	fp = fopen("test_write_read.bmp", "r");
+        1:   57:	BMPImage* test_read_image = read_bmp(fp, &error);
+        1:   58:	mu_check( test_read_image == test_image );	
+        1:   59:	fclose(fp);
+        1:   60:	mu_check( test_image != NULL);	
+        1:   61:	free_bmp(test_image);
+        1:   62:	mu_check( test_image == NULL);	
+        1:   63:	mu_check( test_image != NULL);	
+        1:   64:	free_bmp(test_read_image);
+        1:   65:	mu_check( test_image == NULL);	
+        1:   66:	mu_check(error == NULL);
+        1:   67:	mu_end();
+        -:   68:}
+        1:   69:int test_crop_no_padding(){
+        -:   70:
+        1:   71:	mu_start();																	
+        1:   72:	BMPImage* test_image = create_bmp(6,6,0xff,0xaa,0xbb);
+        1:   73:	FILE* fp = fopen("test_write_read.bmp","w");
+        1:   74:	const char* error = NULL;
+        1:   75:	bool is_success = write_bmp(fp, test_image, &error);
+        1:   76:	mu_check( is_success);
+        1:   77:	BMPImage* cropped_bmp = crop_bmp(test_image, 2, 3, 4, 2, &error);
+        1:   78:	set_pixel(test_image, 2, 3, 0xcc,0xcc,0xcc);
+        1:   79:	BMPImage* cropped_bmp2 = crop_bmp(test_image, 2, 3, 4, 2, &error);
+        1:   80:	mu_check( test_image -> data != cropped_bmp -> data);
+        1:   81:	mu_check( cropped_bmp2 -> data != cropped_bmp -> data);
+        1:   82:	mu_check( check_bmp_header(&cropped_bmp -> header, fp));
+        1:   83:	mu_check(cropped_bmp -> header.height_px < test_image -> header.height_px && cropped_bmp -> header.width_px < test_image -> header.width_px);
+        1:   84:	mu_check(cropped_bmp -> header.size <= test_image -> header.size);
+        1:   85:	free_bmp(test_image);
+        1:   86:	free_bmp(cropped_bmp);
+        1:   87:	free_bmp(cropped_bmp2);
+        1:   88:	mu_check( test_image == NULL);	
+        1:   89:	mu_check( cropped_bmp == NULL);	
+        1:   90:	fclose(fp);
+        1:   91:	mu_check(error == NULL);
+        1:   92:	mu_end();
+        -:   93:}
+        1:   94:int test_crop_padding(){
+        -:   95:
+        1:   96:	mu_start();																	
+        1:   97:	BMPImage* test_image = create_bmp(6,6,0xff,0xaa,0xbb);
+        1:   98:	FILE* fp = fopen("test_write_read.bmp","w");
+        1:   99:	const char* error = NULL;
+        1:  100:	bool is_success = write_bmp(fp, test_image, &error);
+        1:  101:	mu_check( is_success);
+        1:  102:	BMPImage* cropped_bmp = crop_bmp(test_image, 5, 5, 1, 1, &error);
+        1:  103:	set_pixel(test_image, 1, 1, 0xcc,0xcc,0xcc);
+        1:  104:	BMPImage* cropped_bmp2 = crop_bmp(test_image, 5, 5, 1, 1, &error);
+        1:  105:	mu_check( test_image -> data != cropped_bmp -> data);
+        1:  106:	mu_check( cropped_bmp2 -> data != cropped_bmp -> data);
+        1:  107:	mu_check( check_bmp_header(&cropped_bmp -> header, fp));
+        1:  108:	mu_check(cropped_bmp -> header.height_px < test_image -> header.height_px && cropped_bmp -> header.width_px < test_image -> header.width_px);
+        1:  109:	mu_check(cropped_bmp -> header.size <= test_image -> header.size);
+        1:  110:	free_bmp(test_image);
+        1:  111:	free_bmp(cropped_bmp);
+        1:  112:	free_bmp(cropped_bmp2);
+        1:  113:	mu_check( test_image == NULL);	
+        1:  114:	mu_check( cropped_bmp == NULL);	
+        1:  115:	fclose(fp);
+        1:  116:	mu_check(error == NULL);
+        1:  117:	mu_end();
+        -:  118:}
+        1:  119:int test_failed_header(){
+        -:  120:
+        1:  121:	mu_start();																	
+        1:  122:	BMPImage* test_image = create_bmp(6,6,0xff,0xaa,0xaa);
+        -:  123:	// making it corrupt to all every single header requirement
+        1:  124:	test_image -> header. type  = 0x4d40;
+        1:  125:	test_image -> header. offset = 100;
+        1:  126:	test_image -> header. dib_header_size = 50;
+        1:  127:	test_image -> header. num_planes = 2;
+        1:  128:	test_image -> header. compression = 1;
+        1:  129:	test_image -> header. num_colors = 1;
+        1:  130:	test_image -> header. bits_per_pixel  = 10;
+        1:  131:	test_image -> header. width_px = 10;
+        -:  132:	//now it will fail all 8 check_header_bmp requirement
+        1:  133:	FILE* fp = fopen("test_write_read.bmp","w");
+        1:  134:	const char* error = NULL;
+        1:  135:	bool is_success = write_bmp(fp, test_image, &error);
+        1:  136:	mu_check( is_success);
+        1:  137:	mu_check( test_image -> data == NULL);	
+        1:  138:	mu_check( test_image != NULL);	
+        1:  139:	free_bmp(test_image);
+        1:  140:	mu_check( test_image == NULL);	
+        1:  141:	fclose(fp);
+        1:  142:	fp = fopen("test_write_read.bmp", "r");
+        1:  143:	BMPImage* test_read_image = read_bmp(fp, &error);
+        1:  144:	mu_check( test_read_image == NULL);
+        1:  145:	fclose(fp);
+        1:  146:	mu_check(error != NULL); 
+        1:  147:	mu_end();
+        -:  148:	
+        -:  149:}
+        -:  150:
+        1:  151:int test_pixel(){
+        -:  152:	
+        1:  153:	mu_start();																	
+        1:  154:	BMPImage* test_image = create_bmp(6,6,0xff,0xaa,0xaa);
+        1:  155:	BMPImage* compare_image = create_bmp(6,6,0xff,0xaa,0xaa);
+        1:  156:	mu_check( compare_image -> data == test_image -> data);	
+        1:  157:	set_pixel(test_image, 1, 1, 0x11,0x11,0x11);
+        1:  158:	mu_check( compare_image -> data != test_image -> data);	
+        1:  159:	FILE* fp = fopen("test_set_pixel.bmp", "w");
+        1:  160:	const char* error = NULL;
+        1:  161:	write_bmp(fp, test_image,&error);
+        1:  162:	mu_check( test_image != NULL);	
+        1:  163:	mu_check( compare_image != NULL);	
+        1:  164:	free_bmp(test_image);
+        1:  165:	free_bmp(compare_image);
+        1:  166:	mu_check( test_image == NULL);	
+        1:  167:	mu_check( compare_image == NULL);	
+        1:  168:	fclose(fp);
+        1:  169:	mu_check(error == NULL);
+        1:  170:	mu_end();
+        -:  171:	
+        -:  172:}
+        -:  173:
+        3:  174:void set_pixel(BMPImage* img, size_t x, size_t y, uint8_t r, uint8_t g, uint8_t b){
+        -:  175:
+        3:  176:	int bits_per_byte = 8;
+        3:  177:	int bytes_per_pixel = img -> header.bits_per_pixel / bits_per_byte;
+        3:  178:	int padding_per_row = ((4 - (img -> header.width_px * (bytes_per_pixel)) % 4) % 4);
+        3:  179:	int bytes_per_row = bytes_per_pixel * img -> header.width_px + padding_per_row; 
+        3:  180:	int start_y = img -> header.height_px - y -1 ;
+        3:  181:	int idx = x * bytes_per_pixel + ( start_y * bytes_per_row);
+        3:  182:	img -> data[idx++] = b;
+        3:  183:	img -> data[idx++] = g;
+        3:  184:	img -> data[idx++] = r;
+        3:  185:}
+        -:  186:
+        -:  187:
+        7:  188:BMPImage* create_bmp(size_t w, size_t h, uint8_t r, uint8_t g, uint8_t b){
+        7:  189:	BMPImage* new_bmp = malloc(sizeof(*new_bmp));
+        7:  190:	new_bmp -> header.type 				= 0x4d42;
+        7:  191:	new_bmp -> header.reserved1 		= 0;
+        7:  192:	new_bmp -> header.reserved2 		= 0;
+        7:  193:	new_bmp -> header.offset 			= 0x36;
+        7:  194:	new_bmp -> header.dib_header_size 	= 0x28;
+        7:  195:	new_bmp -> header.width_px			= w;
+        7:  196:	new_bmp -> header.height_px 		= h;
+        7:  197:	new_bmp -> header.num_planes 		= 1;
+        7:  198:	new_bmp -> header.bits_per_pixel 	= 0x18;
+        7:  199:	new_bmp -> header.compression 		= 0;
+        7:  200:	new_bmp -> header.x_resolution_ppm	= 0;
+        7:  201:	new_bmp -> header.y_resolution_ppm	= 0;
+        7:  202:	new_bmp -> header.num_colors  		= 0;
+        7:  203:	new_bmp -> header.important_colors 	= 0;
+        -:  204:	
+        7:  205:	int bits_per_byte = 8;
+        7:  206:	int bytes_per_pixel = new_bmp -> header.bits_per_pixel / bits_per_byte;
+        7:  207:	int padding_per_row = ((4 - (new_bmp -> header.width_px * (bytes_per_pixel)) % 4) % 4);
+        7:  208:	int padding_help = padding_per_row * new_bmp -> header.height_px;
+        -:  209:	
+        7:  210:	uint32_t image_size_bytes = (new_bmp -> header.height_px * new_bmp -> header.width_px * bytes_per_pixel) + padding_help;
+        7:  211:	uint32_t size = image_size_bytes + 54;
+        -:  212:
+        7:  213:	new_bmp -> header.size	 			= size;
+        7:  214:	new_bmp -> header.image_size_bytes	= image_size_bytes;
+        -:  215:	
+        7:  216:	new_bmp -> data = malloc(new_bmp -> header.image_size_bytes * sizeof(*(new_bmp -> data)));
+        7:  217:	uint8_t idx = 0;
+       50:  218:	for(int i = 0; i < h; i++){
+      308:  219:		for(int j = 0; j < w ; j++){
+      265:  220:			new_bmp -> data[idx] = b;
+      265:  221:			idx++;
+      265:  222:			new_bmp -> data[idx] = g;
+      265:  223:			idx++;
+      265:  224:			new_bmp -> data[idx] = r;
+      265:  225:			idx++;
+        -:  226:		}
+      136:  227:		for(int k = 0; k < padding_per_row; k++){
+       93:  228:			new_bmp -> data[idx] = 0;
+       93:  229:			idx++;
+        -:  230:		}
+        -:  231:	}
+        7:  232:	return new_bmp;
+        -:  233:}
+        -:  234:
+        -:  235:
+        -:  236:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */

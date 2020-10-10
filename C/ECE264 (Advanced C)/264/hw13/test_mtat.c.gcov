@@ -1,0 +1,242 @@
+        -:    0:Source:test_mtat.c
+        -:    0:Graph:test_mtat.gcno
+        -:    0:Data:test_mtat.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <assert.h>
+        -:    4:#include <pthread.h>
+        -:    5:#include <stdbool.h>
+        -:    6:#include <string.h>
+        -:    7:#include <errno.h>
+        -:    8:#include "miniunit.h"
+        -:    9:#include "bmp.h"
+        -:   10:#include "mtat.h"
+        -:   11:
+        -:   12:int test_r_1();
+        -:   13:int test_r_2();
+        -:   14:int test_r_3();
+        -:   15:int test_r_4();
+        -:   16:int test_r_5();
+        -:   17://int test_threads_2();
+        -:   18:int test_large_image_r_05();
+        -:   19:int test_large_image_r_10();
+        -:   20:int test_large_image_r_20();
+        -:   21:int test_large_image_r_40();
+        -:   22:int test_empty_image();
+        -:   23:
+        -:   24:
+        1:   25:int test_r_1(){
+        1:   26:	mu_start();
+        1:   27:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+        1:   28:	const char* error = NULL;
+        1:   29:	BMPImage* original_6x6 = read_bmp(fp, &error);
+        1:   30:	fclose(fp);
+        1:   31:	BMPImage* mono_6x6 = binarize(original_6x6, 1, 36, &error);
+        1:   32:	fp = fopen("mono_6x6_r_1.bmp", "w");
+        1:   33:	write_bmp(fp, mono_6x6, &error);
+        1:   34:	free_bmp(original_6x6);
+        1:   35:	free_bmp(mono_6x6);
+        1:   36:	mu_check(fp != NULL);
+        1:   37:	fclose(fp);
+        -:   38:	//mu_check(fp == NULL);
+        1:   39:	mu_end();
+        -:   40:}
+    #####:   41:int test_threads_2(){
+    #####:   42:	mu_start();
+    #####:   43:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+    #####:   44:	const char* error = NULL;
+    #####:   45:	BMPImage* original_6x6 = read_bmp(fp, &error);
+    #####:   46:	fclose(fp);
+    #####:   47:	BMPImage* mono_6x6 = binarize(original_6x6, 1, 10, &error);
+    #####:   48:	fp = fopen("mono_6x6_r_1.bmp", "w");
+    #####:   49:	write_bmp(fp, mono_6x6, &error);
+    #####:   50:	free_bmp(original_6x6);
+    #####:   51:	free_bmp(mono_6x6);
+    #####:   52:	mu_check(fp != NULL);
+    #####:   53:	fclose(fp);
+        -:   54:	//mu_check(fp == NULL);
+    #####:   55:	mu_end();
+        -:   56:}
+        1:   57:int test_empty_image(){
+        1:   58:	mu_start();
+        1:   59:	BMPImage* original_6x6 = NULL;
+        1:   60:	const char* error = NULL;
+        1:   61:	BMPImage* mono_6x6 = binarize(original_6x6, 1, 10, &error);
+        1:   62:	mu_check( mono_6x6 == NULL);	
+        -:   63:	//FILE* fp = fopen("mono_6x6_r_1.bmp", "w");
+        -:   64:	//write_bmp(fp, mono_6x6, &error);
+        -:   65:	//mu_check(fp != NULL);
+        -:   66:	//fclose(fp);
+        -:   67:	//mu_check(fp == NULL);
+        1:   68:	mu_end();
+        -:   69:}
+        -:   70:
+        1:   71:int test_r_2(){
+        1:   72:	mu_start();
+        1:   73:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+        1:   74:	const char* error = NULL;
+        1:   75:	BMPImage* original_6x6 = read_bmp(fp, &error);
+        1:   76:	fclose(fp);
+        1:   77:	BMPImage* mono_6x6 = binarize(original_6x6, 2, 37, &error);
+        1:   78:	fp = fopen("mono_6x6_r_2.bmp", "w");
+        1:   79:	write_bmp(fp, mono_6x6, &error);
+        1:   80:	free_bmp(original_6x6);
+        1:   81:	free_bmp(mono_6x6);
+        1:   82:	mu_check(fp != NULL);
+        1:   83:	fclose(fp);
+        -:   84:	//mu_check(fp == NULL);
+        1:   85:	mu_end();
+        -:   86:}
+        1:   87:int test_r_3(){
+        1:   88:	mu_start();
+        1:   89:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+        1:   90:	const char* error = NULL;
+        1:   91:	BMPImage* original_6x6 = read_bmp(fp, &error);
+        1:   92:	fclose(fp);
+        1:   93:	BMPImage* mono_6x6 = binarize(original_6x6, 3, 7, &error);
+        1:   94:	fp = fopen("mono_6x6_r_3.bmp", "w");
+        1:   95:	write_bmp(fp, mono_6x6, &error);
+        1:   96:	free_bmp(original_6x6);
+        1:   97:	free_bmp(mono_6x6);
+        1:   98:	mu_check(fp != NULL);
+        1:   99:	fclose(fp);
+        -:  100:	//mu_check(fp == NULL);
+        1:  101:	mu_end();
+        -:  102:}
+        1:  103:int test_r_4(){
+        1:  104:	mu_start();
+        1:  105:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+        1:  106:	const char* error = NULL;
+        1:  107:	BMPImage* original_6x6 = read_bmp(fp, &error);
+        1:  108:	fclose(fp);
+        1:  109:	BMPImage* mono_6x6 = binarize(original_6x6, 4, 5, &error);
+        1:  110:	fp = fopen("mono_6x6_r_4.bmp", "w");
+        1:  111:	write_bmp(fp, mono_6x6, &error);
+        1:  112:	free_bmp(original_6x6);
+        1:  113:	free_bmp(mono_6x6);
+        1:  114:	mu_check(fp != NULL);
+        1:  115:	fclose(fp);
+        -:  116:	//mu_check(fp == NULL);
+        1:  117:	mu_end();
+        -:  118:}
+        1:  119:int test_r_5(){
+        1:  120:	mu_start();
+        1:  121:	FILE* fp = fopen("img1_6x6_color.bmp", "r");
+        1:  122:	const char* error = NULL;
+        1:  123:	BMPImage* original_6x6 = read_bmp(fp, &error);
+        1:  124:	fclose(fp);
+        1:  125:	BMPImage* mono_6x6 = binarize(original_6x6, 5, 11, &error);
+        1:  126:	fp = fopen("mono_6x6_r_5.bmp", "w");
+        1:  127:	write_bmp(fp, mono_6x6, &error);
+        1:  128:	free_bmp(original_6x6);
+        1:  129:	free_bmp(mono_6x6);
+        1:  130:	mu_check(fp != NULL);
+        1:  131:	fclose(fp);
+        -:  132:	//mu_check(fp == NULL);
+        1:  133:	mu_end();
+        -:  134:}
+    #####:  135:int test_large_image_r_02(){
+    #####:  136:	mu_start();
+    #####:  137:	FILE* fp = fopen("img2_384x510_gray.bmp", "r");
+    #####:  138:	const char* error = NULL;
+    #####:  139:	BMPImage* original_large = read_bmp(fp, &error);
+    #####:  140:	fclose(fp);
+    #####:  141:	BMPImage* mono_large = binarize(original_large, 2, 800, &error);
+    #####:  142:	fp = fopen("mono_large_r_02.bmp", "w");
+    #####:  143:	write_bmp(fp, mono_large, &error);
+    #####:  144:	free_bmp(original_large);
+    #####:  145:	free_bmp(mono_large);
+    #####:  146:	mu_check(fp != NULL);
+    #####:  147:	fclose(fp);
+        -:  148:	//mu_check(fp == NULL);
+    #####:  149:	mu_end();
+        -:  150:}
+    #####:  151:int test_large_image_r_05(){
+    #####:  152:	mu_start();
+    #####:  153:	FILE* fp = fopen("img2_384x510_gray.bmp", "r");
+    #####:  154:	const char* error = NULL;
+    #####:  155:	BMPImage* original_large = read_bmp(fp, &error);
+    #####:  156:	fclose(fp);
+    #####:  157:	BMPImage* mono_large = binarize(original_large, 5, 10, &error);
+    #####:  158:	fp = fopen("mono_large_r_05.bmp", "w");
+    #####:  159:	write_bmp(fp, mono_large, &error);
+    #####:  160:	free_bmp(original_large);
+    #####:  161:	free_bmp(mono_large);
+    #####:  162:	mu_check(fp != NULL);
+    #####:  163:	fclose(fp);
+        -:  164:	//mu_check(fp == NULL);
+    #####:  165:	mu_end();
+        -:  166:}
+    #####:  167:int test_large_image_r_10(){
+    #####:  168:	mu_start();
+    #####:  169:	FILE* fp = fopen("img2_384x510_gray.bmp", "r");
+    #####:  170:	const char* error = NULL;
+    #####:  171:	BMPImage* original_large = read_bmp(fp, &error);
+    #####:  172:	fclose(fp);
+    #####:  173:	BMPImage* mono_large = binarize(original_large, 10, 10, &error);
+    #####:  174:	fp = fopen("mono_large_r_10.bmp", "w");
+    #####:  175:	write_bmp(fp, mono_large, &error);
+    #####:  176:	free_bmp(original_large);
+    #####:  177:	free_bmp(mono_large);
+    #####:  178:	mu_check(fp != NULL);
+    #####:  179:	fclose(fp);
+        -:  180:	//mu_check(fp == NULL);
+    #####:  181:	mu_end();
+        -:  182:}
+    #####:  183:int test_large_image_r_20(){
+    #####:  184:	mu_start();
+    #####:  185:	FILE* fp = fopen("img2_384x510_gray.bmp", "r");
+    #####:  186:	const char* error = NULL;
+    #####:  187:	BMPImage* original_large = read_bmp(fp, &error);
+    #####:  188:	fclose(fp);
+    #####:  189:	BMPImage* mono_large = binarize(original_large, 20, 30, &error);
+    #####:  190:	fp = fopen("mono_large_r_20.bmp", "w");
+    #####:  191:	write_bmp(fp, mono_large, &error);
+    #####:  192:	free_bmp(original_large);
+    #####:  193:	free_bmp(mono_large);
+    #####:  194:	mu_check(fp != NULL);
+    #####:  195:	fclose(fp);
+        -:  196:	//mu_check(fp == NULL);
+    #####:  197:	mu_end();
+        -:  198:}
+    #####:  199:int test_large_image_r_40(){
+    #####:  200:	mu_start();
+    #####:  201:	FILE* fp = fopen("img2_384x510_gray.bmp", "r");
+    #####:  202:	const char* error = NULL;
+    #####:  203:	BMPImage* original_large = read_bmp(fp, &error);
+    #####:  204:	fclose(fp);
+    #####:  205:	BMPImage* mono_large = binarize(original_large, 40, 30, &error);
+    #####:  206:	fp = fopen("mono_large_r_40.bmp", "w");
+    #####:  207:	write_bmp(fp, mono_large, &error);
+    #####:  208:	free_bmp(original_large);
+    #####:  209:	free_bmp(mono_large);
+    #####:  210:	mu_check(fp != NULL);
+    #####:  211:	fclose(fp);
+        -:  212:	//mu_check(fp == NULL);
+    #####:  213:	mu_end();
+        -:  214:}
+        1:  215:int main(int argc, char* argv[]) {
+        -:  216:	//int test_1 = test_r_1();
+        -:  217:	//if(test_1){ printf("test_1 completed"); }
+        1:  218:	mu_run(test_r_1);
+        1:  219:	mu_run(test_empty_image);
+        -:  220:	//mu_run(test_threads_2);
+        -:  221:	
+        1:  222:	mu_run(test_r_2);
+        1:  223:	mu_run(test_r_3);
+        1:  224:	mu_run(test_r_4);
+        1:  225:	mu_run(test_r_5);
+        -:  226:	/*
+        -:  227:	mu_run(test_large_image_r_02);
+        -:  228:	
+        -:  229:	mu_run(test_large_image_r_05);
+        -:  230:	
+        -:  231:	mu_run(test_large_image_r_10);
+        -:  232:	mu_run(test_large_image_r_20);
+        -:  233:	mu_run(test_large_image_r_40);
+        -:  234:*/	
+        1:  235:	return EXIT_SUCCESS;
+        -:  236:}
+        -:  237:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */

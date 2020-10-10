@@ -1,0 +1,55 @@
+1
+TRUE
+2147483647
+TRUE
+-2147483648
+TRUE
+FALSE
+-123
+TRUE
+FALSE
+
+Done testing parse_int
+
+
+TRUE
+a
+TRUE
+abc
+TRUE
+
+Done testing parse_int
+
+
+TRUE
+a
+TRUE
+abc
+TRUE
+
+
+FALSE
+FALSE
+FALSE
+FALSE
+string\
+TRUE
+FALSE
+split \a string with slash a
+TRUE
+backslash string\ test
+TRUE
+FALSE
+string
+TRUE
+12345
+TRUE
+string with empty space
+TRUE
+12345
+TRUE
+-123
+TRUE
+123
+TRUE
+FALSE

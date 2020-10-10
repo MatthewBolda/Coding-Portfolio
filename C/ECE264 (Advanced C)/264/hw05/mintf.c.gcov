@@ -1,0 +1,191 @@
+        -:    0:Source:mintf.c
+        -:    0:Graph:mintf.gcno
+        -:    0:Data:mintf.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <stdarg.h>
+        -:    4:#include "mintf.h"
+        -:    5:#include <stdbool.h>
+        -:    6:#include <limits.h>
+        -:    7:
+        -:    8:
+        -:    9:
+       18:   10:void mintf(const char *format, ...){
+        -:   11:	//initialize the va function
+        -:   12:	va_list more_args;
+       18:   13:	va_start(more_args, format);
+        -:   14:	//same concept as prefix from hw02 to search through string
+       18:   15:	int idx_count = 0;
+       18:   16:	int int_for_print = 0;
+        -:   17:	char *string;
+        -:   18:	int ascii_val;
+       18:   19:	double double_for_print = 0;
+      466:   20:	while(format[idx_count] != '\0'){
+        -:   21:		// test to see if a parameter is potentially coming up
+      430:   22:		if( format[idx_count] == '%'){
+       21:   23:			switch (format[idx_count + 1]) {
+        4:   24:				case 'd':									// for decimal
+        4:   25:					int_for_print = va_arg(more_args, int);
+        4:   26:					print_integer(int_for_print, 10, "");
+        4:   27:					idx_count += 1;
+        -:   28:
+        4:   29:					break;
+        4:   30:				case 'b':									// for binary
+        4:   31:					int_for_print = va_arg(more_args, int);
+        4:   32:					print_integer(int_for_print, 2, "0b");
+        4:   33:					idx_count += 1;
+        -:   34:
+        4:   35:					break;
+        4:   36:				case 'x':									// for hex
+        4:   37:					int_for_print = va_arg(more_args, int);
+        4:   38:					print_integer(int_for_print, 16, "0x");
+        4:   39:					idx_count += 1;
+        -:   40:
+        4:   41:					break;
+        1:   42:				case '$':									// for double with prefix $
+        1:   43:					double_for_print = va_arg(more_args, double);
+        -:   44:
+        1:   45:					long long n = double_for_print * 100;				
+        1:   46:					unsigned long long dollar_abs = n;
+        -:   47:					// deals with printing a negative number
+        1:   48:					if( n < 0 ) {
+    #####:   49:						fputc('-', stdout);
+    #####:   50:						dollar_abs = -n;
+        -:   51:					}
+        -:   52:
+        1:   53:					fputc('$', stdout);
+        -:   54:					// helps find the length 
+        1:   55:					int power_count = 0;
+        1:   56:					unsigned long long dollar_power_count = dollar_abs;
+        -:   57:					// finds power of given integer in given radix
+        -:   58:					do {
+        4:   59:						power_count = power_count + 1;
+        4:   60:						dollar_power_count = dollar_power_count / 10;
+        4:   61:					} while(dollar_power_count > 0);
+        -:   62:					// fixes problem that counter counts 1 to high
+        1:   63:					power_count -= 1;
+        -:   64:
+        -:   65:					// Get the power value
+        1:   66:					unsigned long long temporary_long = dollar_abs;
+        1:   67:					int power_value = 1;
+        4:   68:					for (int idx = 0; idx < power_count; idx++) {
+        3:   69:						power_value *= 10;	
+        -:   70:					}
+        -:   71:
+        -:   72:					// print out the value using fputc
+        5:   73:					for(int i = power_count; i >= 0; i--) {
+        4:   74:						int digit = temporary_long / power_value;
+        4:   75:						fputc('0' + digit, stdout);	
+        4:   76:						if(i == 2){
+        1:   77:							fputc('.', stdout);
+        -:   78:						}
+        4:   79:						temporary_long = temporary_long % (power_value);
+        4:   80:						power_value = power_value / 10;
+        -:   81:					}
+        -:   82:					
+        1:   83:					idx_count += 1;
+        -:   84:
+        1:   85:					break;
+        1:   86:				case 'c':									// for character literal
+        -:   87:						
+        1:   88:					ascii_val = va_arg(more_args, int);
+        1:   89:					fputc(ascii_val, stdout);
+        1:   90:					idx_count += 1;
+        -:   91:
+        1:   92:					break;
+        4:   93:				case 's':									// for string
+        4:   94:					string = va_arg(more_args, char *);
+        4:   95:					int string_idx_count = 0;
+       18:   96:					while (string[string_idx_count] != '\0') {
+       10:   97:						fputc(string[string_idx_count], stdout);
+       10:   98:						string_idx_count +=1;
+        -:   99:					}
+        4:  100:					idx_count += 1;
+        -:  101:
+        4:  102:					break;
+        1:  103:				case '%':									// for putting %
+        1:  104:					fputc('%', stdout);
+        1:  105:					idx_count += 1;
+        -:  106:
+        1:  107:					break;
+        1:  108:				case '\0':									// testing for if % at end
+        1:  109:					fputc('%', stdout);
+        1:  110:					idx_count += 1;
+        -:  111:
+        1:  112:					break;
+        1:  113:				default:									// for everything else
+        1:  114:					fputc('%', stdout);
+        -:  115:					//idx_count += 1;
+        -:  116:
+        1:  117:					break;
+        -:  118:						
+        -:  119:
+        -:  120:			}
+        -:  121:		}
+        -:  122:
+        -:  123:		else{
+      409:  124:			fputc(format[idx_count], stdout);
+        -:  125:		}
+      430:  126:		idx_count += 1;
+        -:  127:	}
+        -:  128:	//end the va function
+       18:  129:	va_end(more_args);
+        -:  130:
+       18:  131:}
+        -:  132:
+        -:  133:
+        -:  134:
+        -:  135:
+        -:  136:
+       12:  137:void print_integer(int n, int radix, char* prefix) {
+        -:  138:	// to fix the INT_MIN
+       12:  139:	unsigned int n_abs = n;
+        -:  140:	// deals with printing a negative number
+       12:  141:	if( n < 0 ) {
+    #####:  142:		fputc('-', stdout);
+    #####:  143:		n_abs = -n;
+        -:  144:	}
+        -:  145:
+        -:  146:	// deals with prefix
+       12:  147:	int idx_count = 0;
+       40:  148:	while(prefix[idx_count] != '\0') {
+       16:  149:		fputc(prefix[idx_count], stdout);
+       16:  150:		idx_count += 1;
+        -:  151:	}
+        -:  152:
+        -:  153:	// helps find the length 
+       12:  154:	int power_count = 0;
+       12:  155:	unsigned int original_integer_for_power_counter = n_abs;
+        -:  156:	// finds power of given integer in given radix
+        -:  157:	do {
+       38:  158:		power_count = power_count + 1;
+       38:  159:		original_integer_for_power_counter = original_integer_for_power_counter / radix;
+       38:  160:	} while(original_integer_for_power_counter > 0);
+        -:  161:	// fixes problem that counter counts 1 to high
+       12:  162:	power_count -= 1;
+        -:  163:	
+        -:  164:	// Get the power value
+       12:  165:	unsigned int temporary_integer = n_abs;
+       12:  166:	int power_value = 1;
+       38:  167:	for (int idx = 0; idx < power_count; idx++) {
+       26:  168:		power_value *= radix;	
+        -:  169:	}
+        -:  170:
+        -:  171:	// print out the value using fputc
+       50:  172:	for(int i = power_count; i >= 0; i--) {
+       38:  173:		int digit = temporary_integer / power_value;
+       38:  174:		if (digit > 9) {
+        -:  175:			//digit += 'a' - ':';
+        6:  176:			fputc('W' + digit, stdout);		
+        -:  177:		}
+        -:  178:		else {	
+       32:  179:			fputc('0' + digit, stdout);		
+        -:  180:		}
+       38:  181:		temporary_integer = temporary_integer % (power_value);
+       38:  182:		power_value = power_value / radix;
+        -:  183:	}
+        -:  184:
+       12:  185:}
+        -:  186:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */

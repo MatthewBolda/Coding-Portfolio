@@ -1,0 +1,195 @@
+        -:    0:Source:json.c
+        -:    0:Graph:json.gcno
+        -:    0:Data:json.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* vim: set tabstop=4 shiftwidth=4 fileencoding=utf-8 noexpandtab: */
+        -:    2:#include <stdbool.h>
+        -:    3:#include <stdio.h>
+        -:    4:#include <assert.h>
+        -:    5:#include <ctype.h>
+        -:    6:#include <stdlib.h>
+        -:    7:#include <string.h>
+        -:    8:#include "json.h"
+        -:    9:
+        -:   10://helper function declaration
+        -:   11:// *a_pos is address of the first character of the integer literal in the input
+        -:   12:// *a_value is the location where the parsed int should be stored
+        -:   13:// return TRUE if int was found at a_pos, false else
+       10:   14:bool parse_int(int* a_value, char** a_pos){
+       10:   15:	*a_value = 0;
+        -:   16:	
+       10:   17:	char* index = *a_pos;
+       10:   18:	bool if_negative = false;
+        -:   19:
+       10:   20:	if( *index == '-'){
+        4:   21:		index = index + 1;
+        4:   22:		if_negative = true;
+        4:   23:		if(!(isdigit(*index))){
+        1:   24:			return false;
+        -:   25:		}
+        -:   26:	}
+        -:   27:
+        9:   28:	if( *index >= '0' && *index <= '9'){
+        8:   29:		int integer_initializing = 0;
+       56:   30:		while( *index >= '0' && *index <= '9'){
+       40:   31:			integer_initializing = integer_initializing *10 + (*index - '0');
+       40:   32:			index ++;
+        -:   33:		}
+        8:   34:		*a_value = integer_initializing;
+        8:   35:		if( if_negative){
+        3:   36:			*a_value = -1 * (*a_value);
+        -:   37:		}
+        -:   38:		
+        8:   39:		*a_pos = index;
+        8:   40:		return true;
+        -:   41:	}
+        -:   42:	else {
+        1:   43:		*a_pos = index;
+        1:   44:		return false;
+        -:   45:	}
+        -:   46:
+        -:   47:}
+        -:   48:
+        -:   49:
+        9:   50:bool parse_string(char** a_s, char** a_pos){
+        9:   51:	*a_s = NULL;
+        9:   52:	int length = strlen(*a_pos);
+        9:   53:	char* result = malloc((length+1) * sizeof(*result));
+        9:   54:	int counter = 0;
+        9:   55:	char* index = *a_pos;
+        -:   56:
+        9:   57:	result[counter++] = *index++;
+      154:   58:	while( *index != '\"'){
+      139:   59:		if( *index == '\n' || *index == '\0'){
+        3:   60:			*a_s = result;
+        -:   61:			//*a_pos = index;
+        3:   62:			result[counter++] = '\0';
+        3:   63:			return false;
+        -:   64:		}
+      136:   65:		result[counter++] = *index++;
+        -:   66:	}
+        6:   67:	result[counter++] = *index++;
+        6:   68:	*a_s = result;
+        6:   69:	result[counter++] = '\0';
+        6:   70:	*a_pos = index;
+        6:   71:	return true;
+        -:   72:}
+        -:   73:/*
+        -:   74:bool parse_list(Node** a_head, char** a_pos){
+        -:   75:	//char* index = *a_pos;
+        -:   76:	if( **a_pos != '['){
+        -:   77:		return false;
+        -:   78:	}
+        -:   79:	else{
+        -:   80:		while(isspace(**a_pos)){
+        -:   81:			*a_pos = *a_pos + 1;
+        -:   82:		}
+        -:   83:		//if( **a_pos == 
+        -:   84:		if( **a_pos != ']'){
+        -:   85:			return true;
+        -:   86:		}
+        -:   87:	}
+        -:   88:	return true;	
+        -:   89:}
+        -:   90:*/
+        7:   91:bool parse_element(Element* a_element, char** a_pos){
+        -:   92:
+        7:   93:	bool parse_worked = false;
+       19:   94:	while(isspace(**a_pos)){
+        5:   95:		*a_pos = *a_pos + 1;
+        -:   96:	}
+        7:   97:	if(isdigit(**a_pos) || **a_pos == '-'){
+        4:   98:		Element initialize = {.type = ELEMENT_INT, .value.as_int = 0};
+        4:   99:		*a_element = initialize;
+        4:  100:		parse_worked =parse_int(&a_element -> value.as_int, a_pos);
+        4:  101:		return parse_worked;
+        -:  102:	}
+        3:  103:	else if( **a_pos == '\"'){
+        2:  104:		char* test_string= "";
+        2:  105:		Element initialize = {.type = ELEMENT_STRING, .value.as_string = test_string};
+        2:  106:		*a_element = initialize;
+        2:  107:		parse_worked = parse_string(&a_element -> value.as_string, a_pos);
+        2:  108:		return parse_worked;
+        -:  109:	}
+        -:  110:	/*
+        -:  111:	else if( **a_pos == '['){
+        -:  112:		
+        -:  113:		Node* head = { .next = NULL,.element = element};
+        -:  114:		Element initialize = {.type = ELEMENT_LIST, .value.as_list = head};
+        -:  115:		*a_element = initialize;
+        -:  116:		parse_worked = parse_list(&a_element -> value.as_list,a_pos);
+        -:  117:		
+        -:  118:		return parse_worked;
+        -:  119:		
+        -:  120:	}
+        -:  121:	*/
+        -:  122:	else{
+        1:  123:		Element initialize = {.type = ELEMENT_INT, .value.as_int = 0};
+        1:  124:		*a_element = initialize;
+        -:  125:
+        1:  126:		return parse_worked;
+        -:  127:	}
+        -:  128:}
+        -:  129:
+        5:  130:void print_element(Element element){
+        5:  131:	if(element.type == ELEMENT_INT){
+        4:  132:		printf("%d", element.value.as_int);
+        -:  133:	}
+        1:  134:	else if(element.type == ELEMENT_STRING){
+        1:  135:		printf("%s", element.value.as_string);
+        -:  136:	}
+        -:  137:	/*
+        -:  138:	else if(element.type == ELEMENT_LIST){
+        -:  139:		printf("[");
+        -:  140:		
+        -:  141:		for(Node* curr = element.value.as_list; curr != NULL; curr = curr -> next){
+        -:  142:			///// print_element(curr -> element); //maybe works idk
+        -:  143:			if(element.type == ELEMENT_INT){
+        -:  144:				printf("%d,", element.value.as_int);
+        -:  145:			}
+        -:  146:			else if(element.type == ELEMENT_STRING){
+        -:  147:				printf("%s,", element.value.as_string);
+        -:  148:			}
+        -:  149:		}
+        -:  150:		printf("]");
+        -:  151:		
+        -:  152:		//for loop notation, check type, print type, go to next, repeat
+        -:  153:		//IDK DO SOMETHING RECURSIVE
+        -:  154:	}
+        -:  155:	*/
+        5:  156:}
+        -:  157:
+        7:  158:void free_element(Element element){
+        7:  159:	if(element.type == ELEMENT_STRING){
+        2:  160:		free(element.value.as_string);
+        -:  161:	}
+        -:  162:	/*
+        -:  163:	if(element.type == ELEMENT_LIST){
+        -:  164:		while( element.value.as_list != NULL){
+        -:  165:			Node* free_node = element.value.as_list;
+        -:  166:			element.value.as_list = free_node -> next;
+        -:  167:			if(free_node -> element.value.as_string !=NULL){
+        -:  168:				free(free_node -> element.value.as_string);
+        -:  169:			}
+        -:  170:			free(free_node);
+        -:  171:		}
+        -:  172:	}
+        -:  173:	*/
+        -:  174:	//else if(element.type == element_list){
+        -:  175:	// //IDK DO SOMETHING RECURSIVE TO FREE LIST
+        -:  176:	//}
+        -:  177:	//else{
+        -:  178:	//	return;
+        -:  179:	//}
+        -:  180:	
+        -:  181:	// this is basically how to delete a list, delete later
+        -:  182:	/*
+        -:  183:	while( a_list -> head != NULL) {
+        -:  184:		ListNode* free_node = a_list -> head;
+        -:  185:		a_list -> head = a_list -> head -> next;
+        -:  186:		free(free_node);
+        -:  187:	}
+        -:  188:	*/
+        7:  189:}
+        -:  190:
