@@ -10,7 +10,7 @@ import os
 import sys
 
 class Building:
-    def __init__(self, abbreviation, fullname, coordinates, building_num, entrances_list):
+    def __init__(self, abbreviation, fullname, coordinates, building_num, entrances_list, bathroom_list):
         self.abbreviation = abbreviation            # the official abbreviation for the building
         self.fullname = fullname                    # the official name of the building
         self.coordinates = coordinates[1:]          # the list of the coordinates for the building
@@ -19,6 +19,12 @@ class Building:
         self.entrance_list = entrances_list         # tuple('letter_ID', 'Accessible Y/N', list of coords)
         self.A_entrance_list = []                   # accessible entrance list
         self.NA_entrance_list = []                  # NONaccessible entrance list
+        self.bathroom_list = bathroom_list          # TODO unknown
+        self.A_bathroom_list = []                   # TODO unknown
+        self.NA_bathroom_list = []                  # TODO unknown
+        self.MEN_bathroom_list = []                 # TODO unknown
+        self.WOMEN_bathroom_list = []               # TODO unknown
+        self.floors_list = []                       # a floor is considered a floor if it has a bathroom
 
         return
 
@@ -87,7 +93,7 @@ def build_dictionary(KMLfile):
                 list_of_coords = []
             elif line == "</coordinates>":
                 need_coords = False
-                new_building = Building(abbreviation, full_name, list_of_coords, building_num, [])
+                new_building = Building(abbreviation, full_name, list_of_coords, building_num, [], [])
                 building_num += 1
                 building_list.append(new_building)
                 #
@@ -102,6 +108,85 @@ def build_dictionary(KMLfile):
                 coordinates = x, y, z
                 list_of_coords.append(coordinates)
     return building_list
+
+
+def build_bathrooms(KMLfile, building_list):
+    bathroom_list = []
+    in_building = False
+    need_name = False
+    need_coords = False
+    building_num = 1
+
+    with open(KMLfile, 'r') as f:
+        lines = f.readlines()
+        for lin in lines:
+            line = line.strip()
+
+            # Are we at the start of the information for a bathroom
+            if line == "<Placemark>":
+                in_building = True
+                need_name = True
+            # Are we at the end of the information for a bathroom
+            elif line == "</Placemark>":
+                in_building = False
+            # Have we could which building this bathroom cooresponds to and if it is Mens/Womens and/or accessible
+            elif need_name == True:
+                # ABBREVIATION, Floor, Identifier, Mens, Womens, Accessible
+                name = line
+                name = name.strip()
+                name = name.strip('<name>')
+                name = name.strip('</name>')
+                abbreviation = name.split(' ')[0]
+                abbreviation = abbreviation.lower()
+                floor = name.split(' ')[1]
+                letter = name.split(' ')[2]
+                mens = name.split(' ')[3]
+                womens = name.split(' ')[4]
+                accessible = name.split(' ')[5]
+                full_name = ''
+                need_name = False
+            # We are past the name and now we will be looking for coordinates
+            elif line == "<coordinates>":
+                need_coords = True
+                list_of_coords = []
+            # We are past the coordinates and now we need to add them to the building
+            elif line == "</coordinates>":
+                need_coords = False
+                for building in list_of_buildings:
+                    if building.abbreviation.upper() == abbreviation.upper():
+                        building.entrance_list.append((letter, accessible, list_of_coords))
+                        not_new = True
+                        if building.floors_list == []:
+                            building.floors_list.append(floor)
+                            not_new = False
+                        for floor_index in building.floors_list:
+                            if floor_index == floor:
+                                not_new = False
+                        if not_new:
+                            building.floors_list.append(floor)
+                        if accessible == 'YES':
+                            building.A_bathroom_list.append((letter, list_of_coords))
+                        if accessible == 'NO':
+                            building.NA_bathroom_list.append((letter, list_of_coords))
+                        if mens == 'YES':
+                            building.MEN_bathroom_list.append((letter, list_of_coords))
+                        if womens == 'YES':
+                            building.WOMEN_bathroom_list.append((letter, list_of_coords))
+                        if accessible != 'NO' and accessible != 'YES':
+                            print('There was an erorr, one of the entrances was not specified to be accessible or not')
+                            print('Please use exactly "YES" or "NO" to specify')
+                            print('The building with a problem is ' + str(building.abbreviation) + 'with entrance '+ str(letter))
+                        break
+            # This is a coordinate for a point on the polygon that outlines a bathroom
+            elif need_coords == True:
+                coords = line.strip()
+                coords = coords.split(',')
+                x = coords[0]
+                y = coords[1]
+                z = coords[2]
+                coordinates = x, y, z
+                list_of_coords.append(coordinates)
+    return
 
 
 def build_entrances(KMLfile, building_list):
@@ -170,7 +255,7 @@ def build_entrances(KMLfile, building_list):
 # outputs will be ParsedBuilding.txt ParsedEntrances.txt
 
 if __name__ == "__main__":
-
+    '''
     if len(sys.argv) == 1:
         BuildingFileName = "UnParsedBuildings.txt"  # change to whatever your txt file is named for buildings
         OutputFileName = "ParsedBuildings.txt"  # this is where you will find the code to copy and paste for buildings
@@ -187,6 +272,11 @@ if __name__ == "__main__":
 # if 2 parameters, script will assume\n\
 # first input is KML file for Buildings, second input is KML file for entrances\n\
 # outputs will be ParsedBuilding.txt ParsedEntrances.txt\n')
+    '''
+    BuildingFileName = "UnParsedBuildings.txt"
+    OutputFileName = "ParsedBuildings.txt"
+    EntranceFileName = "UnParsedEntraces.txt"
+    BathroomFileName = "UnParsedBathrooms.txt"
 
 
     if len(sys.argv) == 1 or len(sys.argv) == 3:
@@ -194,6 +284,7 @@ if __name__ == "__main__":
 
         output_file = open(OutputFileName, 'w')
         build_entrances(EntranceFileName, list_of_buildings)
+        build_bathrooms(BathroomFileName, list_of_buildings)
 
         ''' # This is a test to see that build_dictionary is good
         for building in list_of_buildings:
