@@ -19,12 +19,12 @@ class Building:
         self.entrance_list = entrances_list         # tuple('letter_ID', 'Accessible Y/N', list of coords)
         self.A_entrance_list = []                   # accessible entrance list
         self.NA_entrance_list = []                  # NONaccessible entrance list
-        self.bathroom_list = bathroom_list          # TODO unknown
-        self.A_bathroom_list = []                   # TODO unknown
-        self.NA_bathroom_list = []                  # TODO unknown
-        self.MEN_bathroom_list = []                 # TODO unknown
-        self.WOMEN_bathroom_list = []               # TODO unknown
-        self.floors_list = []                       # a floor is considered a floor if it has a bathroom
+        self.bathroom_list = bathroom_list          # List of all bathrooms                                 TODO
+        self.A_bathroom_list = []                   # List of Accessible bathrooms                          TODO
+        self.NA_bathroom_list = []                  # List of NOT Accessible bathrooms                      TODO
+        self.MEN_bathroom_list = []                 # List of MENS bathrooms                                TODO
+        self.WOMEN_bathroom_list = []               # List of WOMENS bathrooms                              TODO
+        self.floors_list = []                       # a floor is considered a floor if it has a bathroom    TODO
 
         return
 
@@ -119,7 +119,7 @@ def build_bathrooms(KMLfile, building_list):
 
     with open(KMLfile, 'r') as f:
         lines = f.readlines()
-        for lin in lines:
+        for line in lines:
             line = line.strip()
 
             # Are we at the start of the information for a bathroom
@@ -154,7 +154,7 @@ def build_bathrooms(KMLfile, building_list):
                 need_coords = False
                 for building in list_of_buildings:
                     if building.abbreviation.upper() == abbreviation.upper():
-                        building.entrance_list.append((letter, accessible, list_of_coords))
+                        building.bathroom_list.append((letter, accessible, list_of_coords))
                         not_new = True
                         if building.floors_list == []:
                             building.floors_list.append(floor)
@@ -172,11 +172,14 @@ def build_bathrooms(KMLfile, building_list):
                             building.MEN_bathroom_list.append((letter, list_of_coords))
                         if womens == 'YES':
                             building.WOMEN_bathroom_list.append((letter, list_of_coords))
+                        #'''
                         if accessible != 'NO' and accessible != 'YES':
+                            print("ACCESSIBLE IS", accessible)
                             print('There was an erorr, one of the entrances was not specified to be accessible or not')
                             print('Please use exactly "YES" or "NO" to specify')
                             print('The building with a problem is ' + str(building.abbreviation) + 'with entrance '+ str(letter))
-                        break
+                            break
+                        #'''
             # This is a coordinate for a point on the polygon that outlines a bathroom
             elif need_coords == True:
                 coords = line.strip()
@@ -226,9 +229,11 @@ def build_entrances(KMLfile, building_list):
                         building.entrance_list.append((letter, accessible, list_of_coords))
                         if accessible == 'YES':
                             building.A_entrance_list.append((letter, list_of_coords))
-                        if accessible == 'NO':
+                        if accessible == 'NO' or accessible == "NOÂ ":
+                            accessible = "NO"
                             building.NA_entrance_list.append((letter, list_of_coords))
                         if accessible != 'NO' and accessible != 'YES':
+                            print("ACCESSIBLE IS", accessible)
                             print('There was an erorr, one of the entrances was not specified to be accessible or not')
                             print('Please use exactly "YES" or "NO" to specify')
                             print('The building with a problem is ' + str(building.abbreviation) + 'with entrance '+ str(letter))
@@ -244,6 +249,20 @@ def build_entrances(KMLfile, building_list):
                 z = coords[2]
                 coordinates = x, y, z
                 list_of_coords.append(coordinates)
+    return
+
+def helper_entrance(list):
+    for item in list:
+        letter, accessible, coords = item
+        print(" ", letter, end = '')
+    print("")
+    return
+
+def helper_bathroom(list):
+    for item in list:
+        letter, accessible, coords = item
+        print(" ", letter, end = '')
+    print("")
     return
 
 # Usage:
@@ -275,7 +294,7 @@ if __name__ == "__main__":
     '''
     BuildingFileName = "UnParsedBuildings.txt"
     OutputFileName = "ParsedBuildings.txt"
-    EntranceFileName = "UnParsedEntraces.txt"
+    EntranceFileName = "UnParsedEntrances.txt"
     BathroomFileName = "UnParsedBathrooms.txt"
 
 
@@ -291,7 +310,7 @@ if __name__ == "__main__":
             build = building.printer()
             output_file.write(build)
         '''
-        #''' # This is a test to see that build_entrances is good
+        ''' # This is a test to see that build_entrances is good
         for building in list_of_buildings:
             if building.abbreviation.upper() == "ARMS":
                 #print(building.entrance_list)
@@ -305,6 +324,23 @@ if __name__ == "__main__":
                 #print('Non-Accessible entrances')
                 #for i in building.NA_entrance_list:
                 #    print(i[0])
+        '''
+
+        #''' # This is a test for a specific building to see all features.
+        for building in list_of_buildings:
+            if building.abbreviation.upper() == "ARMS":
+
+                print("All Entrances", end='')
+                helper_entrance(building.entrance_list)
+                print("All Bathrooms", end='')
+                helper_entrance(building.bathroom_list)
+                #print("All Entrances                ", building.entrance_list)
+                #print("Non-Accessible Entrances     ", building.NA_entrance_list)
+                #print("Accessible Entrances         ", building.NA_entrance_list)
+                #print("All Bathrooms                ", building.bathroom_list)
+                #print("Non-Accessible Bathrooms     ", building.NA_bathroom_list)
+                #print("Accessible Bathrooms         ", building.A_bathroom_list)
+
         #'''
 
         output_file.close()
