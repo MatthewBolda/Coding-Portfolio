@@ -154,7 +154,7 @@ def build_bathrooms(KMLfile, building_list):
                 need_coords = False
                 for building in list_of_buildings:
                     if building.abbreviation.upper() == abbreviation.upper():
-                        building.bathroom_list.append((letter, accessible, list_of_coords))
+                        building.bathroom_list.append((floor, letter, accessible, list_of_coords))
                         not_new = True
                         if building.floors_list == []:
                             building.floors_list.append(floor)
@@ -260,10 +260,106 @@ def helper_entrance(list):
 
 def helper_bathroom(list):
     for item in list:
-        letter, accessible, coords = item
+        floor, letter, accessible, coords = item
         print(" ", letter, end = '')
     print("")
     return
+
+
+def reorder_floors(list_of_floors):
+    lettered_floors = []
+    numbered_floors = []
+    for floor in list_of_floors:
+        try:
+            tester = int(floor)
+            numbered_floors.append(tester)
+        except:
+            lettered_floors.append(floor)
+    numbered_floors.sort()
+    final_list = []
+
+    for floor in lettered_floors:
+        final_list.append(floor)
+    for floor in numbered_floors:
+        final_list.append(floor)
+    return final_list
+
+
+def print_floors(list_of_floors):
+    final_list = list_of_floors
+    ret_str = "[building setLevels:@["
+    length = len(final_list)
+    for i in range(length):
+        if i == length - 1:
+            add_part = '@"' + str(final_list[i]) + '"]]'
+        else:
+            add_part = '@"' + str(final_list[i]) + '", '
+        ret_str = ret_str + add_part
+    return ret_str
+
+def print_bathroom(bathroom, floor_list):
+    floor, identifier, accessible, coords = bathroom
+    ret_str = '// Creating bathroom with Identifier ' + str(identifier) +'\n[building addRestroomWithPaths:@['
+    floor_index = 0
+    try:
+        floor = int(floor)
+    except:
+        pass
+    for temp_floor in floor_list:
+        if temp_floor == floor:
+            break;
+        floor_index += 1
+
+    length = len(coords)
+    for i in range(length):
+        x, y, z = coords[i]
+        if i == length - 1:
+            add_part = '@[@' + str(y) + ', @' + str(x) + ']] level: '+ str(floor_index) +' accessible:' + accessible + ' mapView:mapView];\n'
+        else:
+            add_part = '@[@' + str(y) + ', @' + str(x) + '],\n'
+        ret_str = ret_str + add_part
+    return ret_str
+
+def print_entrance(entrance):
+    identifier, accessible, coords = entrance
+    ret_str = '// Creating entrance with Identifier ' + str(identifier) +'\n[building addEntranceWithPaths:@['
+    length = len(coords)
+    for i in range(length):
+        x, y, z = coords[i]
+        if i == length - 1:
+            add_part = '@[@' + str(y) + ', @' + str(x) + ']] accessible:' + accessible + ' mapView:mapView];\n'
+        else:
+            add_part = '@[@' + str(y) + ', @' + str(x) + '],\n'
+        ret_str = ret_str + add_part
+    return ret_str
+
+def feature_printer_helper(building):
+    # Check to see if floor information has been inputted
+    if building.floors_list == []:
+        total_str = "// Not enough information to input floors\n\n"
+    else:
+        ordered_floors = reorder_floors(building.floors_list)
+        total_str = print_floors(ordered_floors)
+        total_str = total_str + '\n\n'
+
+    # Check to see if entrance information has been inputted
+    if building.entrance_list == []:
+        total_str = total_str + "// Not enough information to input entrances\n\n"
+    else:
+        for entrance in building.entrance_list:
+            total_str = total_str + print_entrance(entrance) + '\n'
+        total_str = total_str + '\n'
+
+    # Check to see if bathroom information has been inputted
+    if building.bathroom_list == []:
+        total_str = total_str + "// Not enough information to input bathrooms\n\n\n"
+    else:
+        for bathroom in building.bathroom_list:
+            total_str = total_str + print_bathroom(bathroom, ordered_floors) + '\n'
+            total_str = total_str + '\n'
+
+    return total_str
+
 
 # Usage:
 # if 0 parameters, script will assume files are named
@@ -305,11 +401,13 @@ if __name__ == "__main__":
         build_entrances(EntranceFileName, list_of_buildings)
         build_bathrooms(BathroomFileName, list_of_buildings)
 
-        ''' # This is a test to see that build_dictionary is good
+        #'''# This is a test to see that build_dictionary is good
         for building in list_of_buildings:
             build = building.printer()
-            output_file.write(build)
-        '''
+            features = feature_printer_helper(building)
+            text_for_building = build + features
+            output_file.write(text_for_building)
+        #'''
         ''' # This is a test to see that build_entrances is good
         for building in list_of_buildings:
             if building.abbreviation.upper() == "ARMS":
@@ -326,21 +424,19 @@ if __name__ == "__main__":
                 #    print(i[0])
         '''
 
-        #''' # This is a test for a specific building to see all features.
+        '''# This is a test for a specific building to see all features.
         for building in list_of_buildings:
             if building.abbreviation.upper() == "ARMS":
-
-                print("All Entrances", end='')
-                helper_entrance(building.entrance_list)
-                print("All Bathrooms", end='')
-                helper_entrance(building.bathroom_list)
-                #print("All Entrances                ", building.entrance_list)
-                #print("Non-Accessible Entrances     ", building.NA_entrance_list)
-                #print("Accessible Entrances         ", building.NA_entrance_list)
-                #print("All Bathrooms                ", building.bathroom_list)
-                #print("Non-Accessible Bathrooms     ", building.NA_bathroom_list)
-                #print("Accessible Bathrooms         ", building.A_bathroom_list)
-
-        #'''
+                ordered_floors = reorder_floors(building.floors_list)
+                total_str = print_floors(ordered_floors)
+                total_str = total_str + '\n\n'
+                for entrance in building.entrance_list:
+                    total_str = total_str + print_entrance(entrance) + '\n'
+                total_str = total_str + '\n'
+                for bathroom in building.bathroom_list:
+                    total_str = total_str + print_bathroom(bathroom, ordered_floors) + '\n'
+                total_str = total_str + '\n'
+                print(total_str)
+        '''
 
         output_file.close()
