@@ -602,7 +602,7 @@
     </Placemark>
     <Placemark>
       <name>HAMP B NO</name>
-      <description>no WC accessible </description>
+      <description>no WC accessible </description>
       <styleUrl>#poly-E65100-1200-77</styleUrl>
       <Polygon>
         <outerBoundaryIs>
@@ -639,7 +639,7 @@
       </Polygon>
     </Placemark>
     <Placemark>
-      <name>HAMP D NO </name>
+      <name>HAMP D NO </name>
       <description>not WC accessible</description>
       <styleUrl>#poly-E65100-1200-77</styleUrl>
       <Polygon>
@@ -677,7 +677,7 @@
       </Polygon>
     </Placemark>
     <Placemark>
-      <name>HAMP F NO </name>
+      <name>HAMP F NO </name>
       <description>not WC accessible</description>
       <styleUrl>#poly-E65100-1200-77</styleUrl>
       <Polygon>
@@ -754,7 +754,7 @@
     </Placemark>
     <Placemark>
       <name>FRNY C NO</name>
-      <description>not WC accessible </description>
+      <description>not WC accessible </description>
       <styleUrl>#poly-E65100-1200-77</styleUrl>
       <Polygon>
         <outerBoundaryIs>

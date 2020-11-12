@@ -234,7 +234,7 @@
       </Polygon>
     </Placemark>
     <Placemark>
-      <name>EE Electrical Engineering Building </name>
+      <name>EE Electrical Engineering Building </name>
       <styleUrl>#poly-000000-1200-77-nodesc</styleUrl>
       <Polygon>
         <outerBoundaryIs>
@@ -538,7 +538,7 @@
       </Polygon>
     </Placemark>
     <Placemark>
-      <name>WALC Thomas S. and Harvey D. Wilmeth Active Learning Center </name>
+      <name>WALC Thomas S. and Harvey D. Wilmeth Active Learning Center </name>
       <styleUrl>#poly-000000-1200-77-nodesc</styleUrl>
       <Polygon>
         <outerBoundaryIs>
@@ -664,7 +664,7 @@
       </Polygon>
     </Placemark>
     <Placemark>
-      <name>STEW Stewart Center </name>
+      <name>STEW Stewart Center </name>
       <styleUrl>#poly-000000-1200-77-nodesc</styleUrl>
       <Polygon>
         <outerBoundaryIs>

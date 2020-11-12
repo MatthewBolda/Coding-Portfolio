@@ -291,7 +291,7 @@ def print_floors(list_of_floors):
     length = len(final_list)
     for i in range(length):
         if i == length - 1:
-            add_part = '@"' + str(final_list[i]) + '"]]'
+            add_part = '@"' + str(final_list[i]) + '"]];'
         else:
             add_part = '@"' + str(final_list[i]) + '", '
         ret_str = ret_str + add_part

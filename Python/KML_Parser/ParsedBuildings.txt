@@ -17,7 +17,7 @@ building = [[Building alloc] initWithShortName:@"ARMS" fullName:@"Armstrong (Nei
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"1", @"2", @"3"]]
+[building setLevels:@[@"B", @"1", @"2", @"3"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.4308688, @-86.9158822],
@@ -199,7 +199,7 @@ building = [[Building alloc] initWithShortName:@"HAMP" fullName:@"Hampton (Delon
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"G", @"1", @"2", @"3", @"4"]]
+[building setLevels:@[@"B", @"G", @"1", @"2", @"3", @"4"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.430154, @-86.9150277],
@@ -227,7 +227,7 @@ building = [[Building alloc] initWithShortName:@"HAMP" fullName:@"Hampton (Delon
 @[@40.4306369, @-86.9148506],
 @[@40.4305726, @-86.9147741],
 @[@40.430594, @-86.9147406],
-@[@40.4306604, @-86.9148117]] accessible:NO  mapView:mapView];
+@[@40.4306604, @-86.9148117]] accessible:NO mapView:mapView];
 
 // Creating entrance with Identifier E
 [building addEntranceWithPaths:@[@[@40.4301468, @-86.9142402],
@@ -241,7 +241,7 @@ building = [[Building alloc] initWithShortName:@"HAMP" fullName:@"Hampton (Delon
 @[@40.4297837, @-86.9146911],
 @[@40.4298021, @-86.9146643],
 @[@40.4298439, @-86.9147153],
-@[@40.4298276, @-86.9147434]] accessible:NO  mapView:mapView];
+@[@40.4298276, @-86.9147434]] accessible:NO mapView:mapView];
 
 // Creating entrance with Identifier G
 [building addEntranceWithPaths:@[@[@40.4301357, @-86.9146136],
@@ -377,7 +377,7 @@ building = [[Building alloc] initWithShortName:@"RHPH" fullName:@"Heine (Robert 
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"2", @"3", @"4", @"5"]]
+[building setLevels:@[@"1", @"2", @"3", @"4", @"5"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.4299859, @-86.9156607],
@@ -456,7 +456,7 @@ building = [[Building alloc] initWithShortName:@"FRNY" fullName:@"Forney Hall of
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"2", @"3", @"4"]]
+[building setLevels:@[@"1", @"2", @"3", @"4"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.4293831, @-86.9142576],
@@ -532,7 +532,7 @@ building = [[Building alloc] initWithShortName:@"MSEE" fullName:@"Materials and 
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"SB", @"1", @"2", @"3"]]
+[building setLevels:@[@"B", @"SB", @"1", @"2", @"3"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.4294715, @-86.912489],
@@ -630,8 +630,8 @@ building = [[Building alloc] initWithShortName:@"JNSN" fullName:@"Johnson (Helen
 // Not enough information to input bathrooms
 
 
-// Creating Building #8 Electrical Engineering Building ...
-building = [[Building alloc] initWithShortName:@"EE" fullName:@"Electrical Engineering Building "];
+// Creating Building #8 Electrical Engineering Building ...
+building = [[Building alloc] initWithShortName:@"EE" fullName:@"Electrical Engineering Building "];
 [building setPathWithPaths:@[@[@40.4287946, @-86.9124832],
                               @[@40.4286068, @-86.9122766],
                               @[@40.4285741, @-86.9123249],
@@ -658,7 +658,7 @@ building = [[Building alloc] initWithShortName:@"EE" fullName:@"Electrical Engin
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"1", @"2", @"3"]]
+[building setLevels:@[@"B", @"1", @"2", @"3"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.4286068, @-86.9122766],
@@ -1019,7 +1019,7 @@ building = [[Building alloc] initWithShortName:@"BRWN" fullName:@"Brown (Herbert
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"2", @"3", @"4", @"5"]]
+[building setLevels:@[@"1", @"2", @"3", @"4", @"5"]];
 
 // Not enough information to input entrances
 
@@ -1120,8 +1120,8 @@ building = [[Building alloc] initWithShortName:@"TOWER" fullName:@"Bell Tower"];
 // Not enough information to input bathrooms
 
 
-// Creating Building #17 Thomas S. and Harvey D. Wilmeth Active Learning Center ...
-building = [[Building alloc] initWithShortName:@"WALC" fullName:@"Thomas S. and Harvey D. Wilmeth Active Learning Center "];
+// Creating Building #17 Thomas S. and Harvey D. Wilmeth Active Learning Center ...
+building = [[Building alloc] initWithShortName:@"WALC" fullName:@"Thomas S. and Harvey D. Wilmeth Active Learning Center "];
 [building setPathWithPaths:@[@[@40.4275737, @-86.9133104],
                               @[@40.4274767, @-86.913309],
                               @[@40.4274767, @-86.9132983],
@@ -1227,7 +1227,7 @@ building = [[Building alloc] initWithShortName:@"KNOY" fullName:@"Knoy (Maurice 
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"1", @"2", @"3", @"4"]]
+[building setLevels:@[@"B", @"1", @"2", @"3", @"4"]];
 
 // Not enough information to input entrances
 
@@ -1341,8 +1341,8 @@ building = [[Building alloc] initWithShortName:@"POTR" fullName:@"Potter (A. A.)
 // Not enough information to input bathrooms
 
 
-// Creating Building #21 Stewart Center ...
-building = [[Building alloc] initWithShortName:@"STEW" fullName:@"Stewart Center "];
+// Creating Building #21 Stewart Center ...
+building = [[Building alloc] initWithShortName:@"STEW" fullName:@"Stewart Center "];
 [building setPathWithPaths:@[@[@40.4254604, @-86.9129897],
                               @[@40.4254614, @-86.9132646],
                               @[@40.425492, @-86.913266],
@@ -1813,7 +1813,7 @@ building = [[Building alloc] initWithShortName:@"LWSN" fullName:@"Lawson Compute
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"1", @"2", @"3"]]
+[building setLevels:@[@"B", @"1", @"2", @"3"]];
 
 // Not enough information to input entrances
 
@@ -1895,7 +1895,7 @@ building = [[Building alloc] initWithShortName:@"BALY" fullName:@"Bailey Hall"];
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"2"]]
+[building setLevels:@[@"1", @"2"]];
 
 // Not enough information to input entrances
 
@@ -2181,7 +2181,7 @@ building = [[Building alloc] initWithShortName:@"PHYS" fullName:@"Physics Buildi
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"3"]]
+[building setLevels:@[@"1", @"3"]];
 
 // Creating entrance with Identifier A
 [building addEntranceWithPaths:@[@[@40.430069, @-86.9138281],
@@ -2377,7 +2377,7 @@ building = [[Building alloc] initWithShortName:@"ME" fullName:@"Mechanical Engin
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"1", @"2", @"3"]]
+[building setLevels:@[@"1", @"2", @"3"]];
 
 // Creating entrance with Identifier B
 [building addEntranceWithPaths:@[@[@40.428692, @-86.9126566],
@@ -2459,7 +2459,7 @@ building = [[Building alloc] initWithShortName:@"BRNG" fullName:@"Beering Hall"]
 
 [buildingsArr addObject:building];
 
-[building setLevels:@[@"B", @"1", @"2", @"3", @"4", @"5", @"6", @"7"]]
+[building setLevels:@[@"B", @"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
 
 // Not enough information to input entrances
 
